@@ -30,6 +30,7 @@
             <form role="form">
               <div class="form-group" style="display:inline;">
                 <div class="input-group">
+                  <input id = "connect"type = "button" value = "connect" onclick= "Connect()">
                   <input class="form-control input-lg" name="candidateName">
                   </input>
                   <span class="input-group-btn">
@@ -50,24 +51,25 @@
       // Initialize Web3
       // ethereum.request({ method: 'eth_requestAccounts' });
 
-      const getData = async () => {
-        const web3 = new Web3(Web3.givenProvider);
-        const network = await web3.eth.net.getNetworkType();
-        await window.ethereum.enable();
-        const accounts = await web3.eth.getAccounts();
-        setAccount(accounts[0]);
-        console.log("TCL: getData -> network", network);
-        console.log("TCL: getData -> accounts", accounts);
-      };
-
+      if (typeof web3 !== 'undefined') {
+        web3 = new Web3(web3.currentProvider);
+      } else {
       
         web3 = new Web3(new Web3.providers.HttpProvider('https://ropsten.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161'));
 
       
+      }
+
+      async function Connect(){
+    await window.web3.currentProvider.enable();
+    web3 = new web3(window.web3.currentProvider)
+}
+
+
       console.log("web3 is:",web3)
       // Set Account
+      web3.currentProvider.enable();
       web3.eth.defaultAccount = web3.eth.accounts[0];
-      console.log(web3.eth)
 
       // Set Contract Abi
       var contractAbi = [
